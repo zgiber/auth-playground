@@ -1,4 +1,4 @@
-package auth
+package authentication
 
 import (
 	"context"
@@ -8,9 +8,9 @@ import (
 
 // Persistence provides data storage for the Authentication service
 type Persistence interface {
-	ClientIDByToken(context.Context, string) (string, bool, error)
-	CreateAccessToken(context.Context, string) (string, error)
-	DeleteAccessTokens(context.Context, string) error
+	ClientIDByToken(ctx context.Context, token string) (string, bool, error)
+	SetAccessToken(ctx context.Context, clientID, token string) error
+	DeleteAccessTokens(ctx context.Context, clientID string) error
 }
 
 type service struct {
@@ -35,8 +35,8 @@ func (s *service) Authenticate(ctx context.Context, req *auth.AuthenticationRequ
 }
 
 func (s *service) CreateAccessToken(ctx context.Context, req *auth.CreateAccessTokenRequest) (res *auth.CreateAccessTokenResponse, err error) {
-	var accessToken string
-	accessToken, err = s.p.CreateAccessToken(ctx, req.ClientID)
+	accessToken := generateRandomToken()
+	err = s.p.SetAccessToken(ctx, req.ClientID, accessToken)
 	if err != nil {
 		res.Error = &auth.Error{
 			ErrorCode:   "CREATE_TOKEN_FAILED",
@@ -60,4 +60,8 @@ func (s *service) DeleteAccessTokens(ctx context.Context, req *auth.DeleteAccess
 	}
 	res.Success = true
 	return
+}
+
+func generateRandomToken() string {
+	return "TODO!!" // TODO
 }
