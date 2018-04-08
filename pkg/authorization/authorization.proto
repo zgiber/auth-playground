@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package authorization;
+
+service Authorization {
+	rpc Authorize(AuthorizationRequest) returns (AuthorizationResponse){}
+}
+
+message AuthorizationRequest{
+	string clientID = 1;
+	string action = 2;
+	string resourceName = 3;
+}
+
+message AuthorizationResponse{
+	bool success = 1;
+	string jwt = 2;
+	Error error = 3;
+}
+
+message Error {
+	string errorCode = 1;
+	string description = 2;
+}
+
+message SimpleResponse {
+	bool success = 1;
+	Error error = 2;
+}

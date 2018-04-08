@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package identity;
+
+service IdentityService {
+	rpc Create(CreateIdentityRequest) returns (SimpleResponse){}
+	rpc Retrieve(RetrieveIdentityRequest) returns(IdentityResponse){}
+	rpc Verify(VerifyIdentityRequest) returns(IdentityResponse){}
+	rpc Delete(Identity) returns (SimpleResponse){}
+}
+
+message CreateIdentityRequest {
+	Identity identity = 1;
+	string secret = 2;
+}
+
+message RetrieveIdentityRequest {
+	string clientID = 1;
+}
+
+message VerifyIdentityRequest {
+	string secret = 1;
+}
+
+message IdentityResponse {
+	bool success = 1;
+	Identity identity = 2;
+	Error error = 3;
+}
+
+message Identity {
+	string clientID = 1;
+	string clientType = 2;
+}
+
+message Error {
+	string errorCode = 1;
+	string description = 2;
+}
+
+message SimpleResponse {
+	bool success = 1;
+	Error error = 2;
+}
+

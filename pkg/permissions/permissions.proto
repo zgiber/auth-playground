@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package permissions;
+
+service Permissions {
+	rpc Grant(Permission) returns (SimpleResponse){}
+	rpc List(ListPermissionsRequest) returns (ListPermissionsResponse){}
+	rpc Revoke(Permission) returns (SimpleResponse){}
+	rpc RevokeMulti(RevokePermissionsRequest) returns (SimpleResponse){}
+}
+
+message Permission {
+	string clientID = 1;
+	string resource = 2;
+	repeated string actions = 3;
+}
+
+message ListPermissionsRequest {
+	string clientID = 1;
+	string resource = 2;
+}
+
+message ListPermissionsResponse {
+	bool success = 1;
+	repeated Permission permissions = 2;
+	Error error = 3;
+}
+
+message RevokePermissionsRequest {
+	repeated Permission permissions = 1;
+}
+
+message Error {
+	string errorCode = 1;
+	string description = 2;
+}
+
+message SimpleResponse {
+	bool success = 1;
+	Error error = 2;
+}

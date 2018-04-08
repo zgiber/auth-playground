@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package authentication;
+
+service Authentication {
+	rpc Authenticate(AuthenticationRequest) returns (AuthenticationResponse) {}
+	rpc CreateAccessToken(CreateAccessTokenRequest) returns (CreateAccessTokenResponse){}	
+	rpc DeleteAccessTokens(DeleteAccessTokensRequest) returns (DeleteAccessTokensResponse){}
+}
+
+message CreateAccessTokenRequest {
+	string clientID = 1;
+}
+
+message CreateAccessTokenResponse {
+	bool success = 1;
+	string accessToken = 2;
+	Error error = 3;
+}
+
+message DeleteAccessTokensRequest {
+	string clientID = 1;
+}
+
+message DeleteAccessTokensResponse {
+	bool success = 1;
+	Error error = 2;
+}
+
+message AuthenticationRequest {
+	string accessToken = 1;
+}
+
+message AuthenticationResponse{
+	bool success = 1;
+	string clientID = 2;
+	Error error = 3;
+}
+
+message Error {
+	string errorCode = 1;
+	string description = 2;
+}
+
+message SimpleResponse {
+	bool success = 1;
+	Error error = 2;
+}
